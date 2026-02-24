@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feliz Cumple Tuchis - Estilo AC/DC Pixel</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --st-red: #ff0000;
+            --st-blue: #050505;
+        }
+
+        body {
+            margin: 0;
+            background-color: var(--st-blue);
+            background-image: radial-gradient(circle, rgba(20,20,20,0.4) 0%, rgba(0,0,0,0.9) 100%);
+            color: white;
+            font-family: 'Press Start 2P', cursive;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* DISEÑO LETRERO ESTILO AC/DC PIXEL */
+        .acdc-logo {
+            cursor: pointer;
+            text-align: center;
+            transition: transform 0.2s;
+            user-select: none;
+            padding: 20px;
+        }
+
+        .acdc-logo:hover {
+            transform: scale(1.05);
+        }
+
+        .acdc-text {
+            font-size: 3.5rem;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: -2px;
+            /* Efecto de borde pixelado metálico */
+            text-shadow: 
+                4px 4px 0px var(--st-red),
+                -4px -4px 0px #333;
+            line-height: 1.2;
+            display: inline-block;
+        }
+
+        /* El rayo icónico estilo pixel */
+        .lightning-bolt {
+            color: var(--st-red);
+            font-size: 5rem;
+            display: block;
+            margin: -10px 0;
+            text-shadow: 0 0 15px var(--st-red);
+            animation: pulse 0.5s infinite alternate;
+        }
+
+        @keyframes pulse {
+            from { opacity: 0.8; filter: brightness(1); }
+            to { opacity: 1; filter: brightness(1.5); }
+        }
+
+        /* CONTENEDOR DE FOTOS */
+        #slideshow {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: black;
+            display: none; /* Se activa al dar clic */
+            z-index: 100;
+        }
+
+        .slide {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            opacity: 0;
+            transition: opacity 0.8s ease-in-out;
+        }
+
+        .active {
+            opacity: 1;
+        }
+
+        .instruccion {
+            margin-top: 20px;
+            font-size: 0.6rem;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="acdc-logo" id="btn-start">
+        <div class="acdc-text">FELIZ<br>CUMPLE</div>
+        <div class="lightning-bolt">⚡</div>
+        <div class="acdc-text">TUCHIS</div>
+        <p class="instruccion">PULSA PARA ROCKNEAR</p>
+    </div>
+
+    <div id="slideshow">
+        </div>
+
+    <audio id="music" loop>
+        <source src="The Clash - Should I Stay or Should I Go (Official Audio).mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        const images = [
+            "WhatsApp Image 2026-02-24 at 4.38.03 PM.jpeg",
+            "WhatsApp Image 2026-02-24 at 4.38.05 PM (1).jpeg",
+            "WhatsApp Image 2026-02-24 at 4.38.05 PM.jpeg",
+            "WhatsApp Image 2026-02-24 at 4.38.04 PM.jpeg",
+            "WhatsApp Image 2026-02-24 at 4.38.03 PM (1).jpeg",
+            "WhatsApp Image 2026-02-24 at 4.38.02 PM.jpeg",
+            "IMG_20240630_175155.jpg",
+            "IMG_20240630_175126.jpg"
+        ];
+
+        let current = 0;
+        const btn = document.getElementById('btn-start');
+        const audio = document.getElementById('music');
+        const display = document.getElementById('slideshow');
+
+        btn.addEventListener('click', () => {
+            // 1. Iniciar Música
+            audio.play().catch(err => console.log("Error de audio:", err));
+            
+            // 2. Mostrar Contenedor
+            display.style.display = 'block';
+
+            // 3. Crear Imágenes si no están creadas
+            if(display.innerHTML.trim() === "") {
+                images.forEach((src, idx) => {
+                    const img = document.createElement('img');
+                    img.src = src;
+                    img.className = 'slide' + (idx === 0 ? ' active' : '');
+                    display.appendChild(img);
+                });
+            }
+
+            // 4. Iniciar Presentación
+            setInterval(() => {
+                const slides = document.querySelectorAll('.slide');
+                slides[current].classList.remove('active');
+                current = (current + 1) % slides.length;
+                slides[current].classList.add('active');
+            }, 3000);
+        });
+    </script>
+</body>
+</html>
