@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¡Feliz Cumple Tuchis!</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #050505;
+            /* Fondo pixelado estilo Stranger Things / Upside Down */
+            background-image: 
+                linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
+                url('https://i.pinimg.com/originals/c1/9a/36/c19a3693e506611f758f844855d08316.gif');
+            background-size: cover;
+            background-position: center;
+            font-family: 'Press Start 2P', cursive;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        /* LETRERO AC/DC PIXEL */
+        .acdc-header {
+            text-align: center;
+            z-index: 10;
+            margin-bottom: 20px;
+            animation: glow 1.5s infinite alternate;
+        }
+
+        .acdc-text {
+            font-size: 2.8rem;
+            color: #fff;
+            text-transform: uppercase;
+            text-shadow: 4px 4px 0px #ff0000;
+            display: inline-block;
+            line-height: 1;
+        }
+
+        .bolt {
+            color: #ff0000;
+            font-size: 4.5rem;
+            display: block;
+            margin: 5px 0;
+            text-shadow: 0 0 20px #ff0000;
+        }
+
+        @keyframes glow {
+            from { filter: drop-shadow(0 0 5px #ff0000); }
+            to { filter: drop-shadow(0 0 20px #ff0000); }
+        }
+
+        /* CONTENEDOR DE PRESENTACIÓN */
+        #slideshow-container {
+            position: relative;
+            width: 320px; /* Tamaño más pequeño */
+            height: 400px;
+            display: none; /* Se activa al clic */
+            z-index: 5;
+            /* MARCO ESTILO STRANGER THINGS */
+            border: 6px solid #111;
+            outline: 4px solid #ff0000;
+            box-shadow: 0 0 30px #ff0000, inset 0 0 15px #ff0000;
+            background: #000;
+        }
+
+        .slide {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+
+        .active {
+            opacity: 1;
+        }
+
+        .overlay-text {
+            position: absolute;
+            bottom: -40px;
+            font-size: 0.6rem;
+            color: #ff0000;
+            text-align: center;
+            width: 100%;
+        }
+    </style>
+</head>
+<body onclick="iniciarSitio()">
+
+    <div class="acdc-header" id="main-header">
+        <div class="acdc-text">FELIZ</div>
+        <div class="bolt">⚡</div>
+        <div class="acdc-text">CUMPLE<br>TUCHIS</div>
+        <p style="font-size: 0.5rem; margin-top: 20px;">[ TOCA PARA CONTINUAR ]</p>
+    </div>
+
+    <div id="slideshow-container">
+        </div>
+
+    <audio id="musica" loop>
+        <source src="The Clash - Should I Stay or Should I Go (Official Audio).mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        const imagenes = [
+            "WhatsApp Image 2026-02-24 at 4.38.03 PM.jpeg",
+            "WhatsApp Image 2026-02-24 at 4.38.05 PM (1).jpeg",
+            "WhatsApp Image 2026-02-24 at 4.38.05 PM.jpeg",
+            "WhatsApp Image 2026-02-24 at 4.38.04 PM.jpeg",
+            "WhatsApp Image 2026-02-24 at 4.38.03 PM (1).jpeg",
+            "WhatsApp Image 2026-02-24 at 4.38.02 PM.jpeg",
+            "IMG_20240630_175155.jpg",
+            "IMG_20240630_175126.jpg"
+        ];
+
+        let indiceActual = 0;
+        let iniciado = false;
+
+        function iniciarSitio() {
+            if (iniciado) return;
+            iniciado = true;
+
+            // Ocultar mensaje inicial y mostrar fotos
+            document.getElementById('slideshow-container').style.display = 'block';
+            
+            // Reproducir música
+            const audio = document.getElementById('musica');
+            audio.play();
+
+            // Cargar imágenes en el contenedor
+            const contenedor = document.getElementById('slideshow-container');
+            imagenes.forEach((src, idx) => {
+                const img = document.createElement('img');
+                img.src = src;
+                img.className = 'slide' + (idx === 0 ? ' active' : '');
+                contenedor.appendChild(img);
+            });
+
+            // Cambiar fotos cada 3 segundos
+            setInterval(() => {
+                const slides = document.querySelectorAll('.slide');
+                slides[indiceActual].classList.remove('active');
+                indiceActual = (indiceActual + 1) % slides.length;
+                slides[indiceActual].classList.add('active');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
